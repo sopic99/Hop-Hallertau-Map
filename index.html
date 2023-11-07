@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Display a web map using an alternate projection</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+<!-- Load the `mapbox-gl-geocoder` plugin. -->
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1Ijoic29waWNobGVyIiwiYSI6ImNsb2xvajlrcTI4anUycm8yencxdnBmYTgifQ.cSoMgoF3gT8a2ejTJwVOPw';
+    const map = new mapboxgl.Map({
+        container: 'map',
+        // Choose from Mapbox'
+        style: 'mapbox://styles/sopichler/clomyh74b00cu01qo9xio395s',
+        center: [11.671326,48.656863],
+        zoom: 9,
+    });
+
+    // Fügen Sie ein JavaScript-Objekt mit Namen und Adressen hinzu
+		var locationData = {
+			'Schlossbrauerei Au-Hallertau': 'Schloßbräugasse 2, 84072 Au in der Hallertau',
+			'Urban Chestnut Hallertauer Brauerei': 'Am Brunnen 2, 85283 Wolnzach',
+			'Joferbräu': 'Mainburger Straße 6, 84089 Aiglsbach',
+			'Forschungsbrauerei St. Johann': 'Mainburger Straße 15, 93358 Train',
+			'Brauerei Horneck': 'Horneck 7, 84094 Elsendorf',
+			'Brauerei zum Kuchlbauer': 'Römerstraße 5-9, 93326 Abensberg',
+			'Siegenburger Spezialitätenbrauerei': 'Hopfenstraße 3, 93354 Siegenburg',
+			'AMP Brewing': 'Fischerweg 11, 85410 Haag an der Amper',
+			'Gebr. Müller Bräu': 'Hauptplatz 2, 85276 Pfaffenhofen an der Ilm',
+			'Klosterbrauerei Scheyern': 'Schyrenplatz 1, 85298 Scheyern',
+			'Klosterbrauerei Furth': 'Am Klosterberg 5, 84095 Furth',
+			'Schlossbrauerei Herrngiersdorf': 'Bernhardstraße 6, 84097 Herrngiersdorf',
+			'Pillmaier Bräu': 'Rottenburger Straße 28, 84085 Langquaid'
+
+		};
+
+     /* Marker hinzufügen */
+     var breweries = [
+            { name: 'Schlossbrauerei Au-Hallertau', coordinates: [11.7915, 48.6057] },
+            { name: 'Urban Chestnut Hallertauer Brauerei', coordinates: [11.616422903486185, 48.616217291230704] },
+            { name: 'Joferbräu', coordinates: [11.716049266977004, 48.69738684957032] },
+            { name: 'Forschungsbrauerei St. Johann', coordinates: [11.813724737720817, 48.73450748226606] },
+            { name: 'Brauerei Horneck', coordinates: [11.85201352225239, 48.70873217115905] },
+            { name: 'Brauerei zum Kuchlbauer', coordinates: [11.844199484592886, 48.831304468984115] },
+            { name: 'Siegenburger Spezialitätenbrauerei', coordinates: [11.844199484592886, 48.761299794770046] },
+            { name: 'AMP Brewing', coordinates: [11.871584897257064, 48.47552643835545] },
+            { name: 'Gebr. Müller Bräu', coordinates: [11.505887931216451, 48.53506419441353] },
+            { name: 'Klosterbrauerei Scheyern', coordinates: [11.452752475131817, 48.50763374335231] },
+            { name: 'Klosterbrauerei Furth', coordinates: [12.024498085637108, 48.61457630841483] },
+            { name: 'Schlossbrauerei Herrngiersdorf', coordinates: [12.066238801002173, 48.79559365232914] },
+            { name: 'Pillmaier Bräu', coordinates: [12.049542514885252, 48.83485910939059] }
+        ];
+
+        breweries.forEach(function(brewery) {
+			var name = brewery.name;
+			var address = locationData[name]; // Holen Sie sich die Adresse aus dem Objekt
+
+			var popup = new mapboxgl.Popup().setHTML('<strong>' + name + '</strong><p>' + address + '</p>');
+
+			new mapboxgl.Marker()
+				.setLngLat(brewery.coordinates)
+				.setPopup(popup)
+				.addTo(map);
+		});
+
+    // Add the control to the map.
+        map.addControl(
+        new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+        })
+        );
+
+// Fügen Sie ein JavaScript-Objekt mit Namen und Adressen für die Händler hinzu
+	var hopsellerData = {
+		'Hopsteiner': 'Auhofstraße 18, 84048 Mainburg',
+		'BarthHaas Nürnberg': 'Freiligrathstraße 7-9, 90482 Nürnberg',
+		'BarthHaas Mainburg': 'Freisinger Straße 13, 84048 Mainburg',
+		'Hopfenverwertungsgenossenschaft HVG': 'Kellerstraße 1, 85283 Wolnzach',
+		'Hopfenverwertungsgenossenschaft HVG Mainburg': 'Freisinger Straße 48, 84048 Mainburg',
+		'Hopfenveredelung St. Johann': 'Mainburger Straße 15, 93358 Train'
+		
+	};
+
+    /* Marker hinzufügen */
+	var hopsellers = [
+		{ name: 'Hopsteiner', coordinates: [11.785576409005612, 48.66405157276247] },
+		{ name: 'BarthHaas Nürnberg', coordinates: [11.130505599409094, 49.50260464384262] },
+		{ name: 'BarthHaas Mainburg', coordinates: [11.779196981700215, 48.63778570596294] },
+		{ name: 'Hopfenverwertungsgenossenschaft HVG', coordinates: [11.628743381461097, 48.60461658275412] },
+		{ name: 'Hopfenverwertungsgenossenschaft HVG Mainburg', coordinates: [11.776453567341171, 48.63897919508086] },
+		{ name: 'Hopfenveredelung St. Johann', coordinates: [11.812644894961245, 48.73024981463676] }
+	];
+
+	hopsellers.forEach(function(hopseller) {
+    var name = hopseller.name;
+    var address = hopsellerData[name]; // Holen Sie sich die Adresse aus dem Objekt
+
+    var popup = new mapboxgl.Popup().setHTML('<strong>' + name + '</strong><p>' + address + '</p>');
+
+    new mapboxgl.Marker({ color: 'green' })
+        .setLngLat(hopseller.coordinates)
+        .setPopup(popup)
+        .addTo(map);
+	
+	});
+
+// Fügen Sie ein JavaScript-Objekt mit Namen und Adressen für die Einrichtungen hinzu
+	var hopinstitutionData = {
+		'Hopfenmuseum': 'Elsenheimerstraße 2, 85283 Wolnzach',
+		'Hopfenring e.V.': 'Kellerstraße 1, 85283 Wolnzach',
+		'Hopfenpflanzerverband': 'Kellerstraße 1, 85283 Wolnzach',
+		'Landeskuratorium für pflanzliche Erzeugung in Bayern e.V.': 'Landsberger Straße 282, 80687 München'
+	};
+
+
+    /* Marker hinzufügen */
+	var hopinstitutions = [
+		{ name: 'Hopfenmuseum', coordinates: [11.627956607095886, 48.60425535792622] },
+		{ name: 'Hopfenring e.V.', coordinates: [11.628621768367042, 48.604611676841294] },
+		{ name: 'Hopfenpflanzerverband', coordinates: [11.628773913837255, 48.604516187674406] },
+		{ name: 'Landeskuratorium für pflanzliche Erzeugung in Bayern e.V.', coordinates: [11.505904225611836, 48.14325801592767] }
+	];
+
+	hopinstitutions.forEach(function(hopinstitution) {
+    var name = hopinstitution.name;
+    var address = hopinstitutionData[name]; // Holen Sie sich die Adresse aus dem Objekt
+
+    var popup = new mapboxgl.Popup().setHTML('<strong>' + name + '</strong><p>' + address + '</p>');
+
+    new mapboxgl.Marker({ color: 'yellow' })
+        .setLngLat(hopinstitution.coordinates)
+        .setPopup(popup)
+        .addTo(map);
+});
+
+// Fügen Sie ein JavaScript-Objekt mit Namen und Adressen für die Forschungseinrichtungen hinzu
+	var hopresearchData = {
+		'Forschungszentrum Hüll': 'Hüll 5 1/3, 85283 Wolnzach',
+		'Bayerische Landesanstalt für Landwirtschaft': 'Hüll 5 1/3, 85283 Wolnzach',
+		'Botanisches Institut Freising': 'Emil-Ramann-Straße 4, 85354 Freising',
+		'GfH Gesellschaft für Hopfenforschung': 'Hüll 5 1/3, 85283 Wolnzach'
+	};
+
+/* Marker hinzufügen */
+var hopresearches = [
+		{ name: 'Forschungszentrum Hüll', coordinates: [11.677335250565594, 48.601569427777505] },
+		{ name: 'Bayerische Landesanstalt für Landwirtschaft', coordinates: [11.676209672857293, 48.60147181000928] },
+		{ name: 'Botanisches Institut Freising', coordinates: [11.720727039153209, 48.39997842563862] },
+		{ name: 'GfH Gesellschaft für Hopfenforschung', coordinates: [11.677357296804487, 48.60153475913875] }
+	];
+
+	hopresearches.forEach(function(hopresearch) {
+    var name = hopresearch.name;
+    var address = hopresearchData[name]; // Holen Sie sich die Adresse aus dem Objekt
+
+    var popup = new mapboxgl.Popup().setHTML('<strong>' + name + '</strong><p>' + address + '</p>');
+
+    new mapboxgl.Marker({ color: 'red' })
+        .setLngLat(hopresearch.coordinates)
+        .setPopup(popup)
+        .addTo(map);
+});
+
+// Fügen Sie ein JavaScript-Objekt mit Namen und Adressen für die politischen Einrichtungen hinzu
+var politicsData = {
+    'Bayerisches Staatsministerium für Ernährung, Landwirtschaft und Forsten': 'Ludwigstraße 2, 80539 München',
+    'Bundesministerium für Ernährung und Landwirtschaft': 'Wilhelmstraße 54, 10117 Berlin',
+    'Europäische Union': 'Rue de Trèves 3, 1050 Bruxelles, Belgien',
+    'Umweltbundesamt': 'Wörlitzer Platz 1, 06844 Dessau-Roßlau'
+};
+
+/* Marker hinzufügen */
+var politics = [
+		{ name: 'Bayerisches Staatsministerium für Ernährung, Landwirtschaft und Forsten', coordinates: [11.579433898093885, 48.144376975735256] },
+		{ name: 'Bundesministerium für Ernährung und Landwirtschaft', coordinates: [13.382408068220476, 52.513965549292756] },
+		{ name: 'Europäische Union', coordinates: [4.375062185220501, 50.83919359066621] },
+		{ name: 'Umweltbundesamt', coordinates: [12.239218652832635, 51.84249934299915] }
+	];
+
+	politics.forEach(function(politic) {
+    var name = politic.name;
+    var address = politicsData[name]; // Holen Sie sich die Adresse aus dem Objekt
+
+    var popup = new mapboxgl.Popup().setHTML('<strong>' + name + '</strong><p>' + address + '</p>');
+
+    new mapboxgl.Marker({ color: 'purple' })
+        .setLngLat(politic.coordinates)
+        .setPopup(popup)
+        .addTo(map);
+});
+
+// Fügen Sie ein JavaScript-Objekt mit Namen und Adressen für die Hopfenanlagen hinzu
+var hopplantsData = {
+    'Bioerdgas Hallertau GmbH': 'Haselsried 1, 85283 Wolnzach',
+    'EON Landshut': 'E.ON-Allee 5, 84036 Landshut',
+    'EON München': 'Arnulfstraße 203, 80639 München'
+};
+
+/* Marker hinzufügen */
+var hopplants = [
+		{ name: 'Bioerdgas Hallertau GmbH', coordinates: [11.69088666813384, 48.626081969568084] },
+		{ name: 'EON Landshut', coordinates: [12.1963569090366, 48.56769018047644] },
+		{ name: 'EON München', coordinates: [11.519298271659881, 48.15181466805948] }
+	];
+
+	hopplants.forEach(function(hopplant) {
+    var name = hopplant.name;
+    var address = hopplantsData[name]; // Holen Sie sich die Adresse aus dem Objekt
+
+    var popup = new mapboxgl.Popup().setHTML('<strong>' + name + '</strong><p>' + address + '</p>');
+
+    new mapboxgl.Marker({ color: 'orange' })
+        .setLngLat(hopplant.coordinates)
+        .setPopup(popup)
+        .addTo(map);
+});
+
+// Fügen Sie ein JavaScript-Objekt mit Namen und Adressen für die Apotheken hinzu
+var pharmaciesData = {
+    'Bionorica': 'Kerschensteinerstraße 11-15, 92318 Neumarkt in der Oberpfalz',
+    'Wala Arzneimittel': '73087 Bad Boll'
+};
+
+/* Marker hinzufügen */
+var pharmacies = [
+		{ name: 'Bionorica', coordinates: [11.468757531895266, 49.262611911341594] },
+		{ name: 'Wala Arzneimittel', coordinates: [9.595441510298983, 48.6370703787647] }
+	];
+
+	pharmacies.forEach(function(pharmacy) {
+    var name = pharmacy.name;
+    var address = pharmaciesData[name]; // Holen Sie sich die Adresse aus dem Objekt
+
+    var popup = new mapboxgl.Popup().setHTML('<strong>' + name + '</strong><p>' + address + '</p>');
+
+    new mapboxgl.Marker({ color: 'pink' })
+        .setLngLat(pharmacy.coordinates)
+        .setPopup(popup)
+        .addTo(map);
+});
+
+</script>
+</body>
+</html>
